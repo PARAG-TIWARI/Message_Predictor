@@ -7,5 +7,7 @@ headless = true\n\
 \n\
 "> ~/.streamlit/config.toml
 
-# Download nltk models
-python -m nltk.downloader -d ~/.nltk_data punkt stopwords
+# Download NLTK data
+mkdir -p ~/.nltk_data
+python -m nltk.downloader -d ~/.nltk_data punkt
+python -m nltk.downloader -d ~/.nltk_data stopwords
