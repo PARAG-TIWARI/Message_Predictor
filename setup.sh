@@ -1,13 +1,14 @@
-mkdir -p ~/.streamlit/
-echo "\
-[server]\n\
-port = $PORT\n\
-enableCORS = false\n\
-headless = true\n\
-\n\
-"> ~/.streamlit/config.toml
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Download NLTK data
-mkdir -p ~/.nltk_data
-python -m nltk.downloader -d ~/.nltk_data punkt
-python -m nltk.downloader -d ~/.nltk_data stopwords
+mkdir -p "$HOME/.streamlit" "$HOME/.nltk_data"
+
+cat > "$HOME/.streamlit/config.toml" <<EOF
+[server]
+port = ${PORT:-8501}
+enableCORS = false
+headless = true
+EOF
+
+# NLTK 3.8+ may use punkt_tab in addition to punkt for word_tokenize.
+python -m nltk.downloader -d "$HOME/.nltk_data" punkt punkt_tab stopwords

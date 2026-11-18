@@ -1,73 +1,101 @@
-# Message Predictor
+# Message Predictor — SMS Spam Classification
 
-**A machine learning–based SMS spam detection system using TF-IDF and Multinomial Naive Bayes, deployed with Streamlit.** :contentReference[oaicite:1]{index=1}
+Message Predictor is a small NLP and machine-learning application that classifies a user-entered SMS/message as **spam** or **ham**. It uses a TF-IDF vectorizer and a trained classifier exposed through a Streamlit interface.
 
-## 🚀 Project Overview
+This is a project demonstration, not a hosted messaging-security product.
 
-This project implements a text classification model that predicts whether a given SMS message is **Spam** or **Not Spam (Ham)**. It uses classic Natural Language Processing (NLP) techniques and a Machine Learning model, then provides a simple web interface for real-time predictions.
+## How it works
 
-The model is built using:
-- **TF-IDF Vectorization** for converting text messages to numeric features.
-- **Multinomial Naive Bayes** classifier for detecting spam messages.
-- **Streamlit** for deployment and UI.
+1. Convert the input text to lowercase and tokenize it with NLTK.
+2. Remove non-alphanumeric tokens and English stopwords.
+3. Apply Porter stemming.
+4. Transform the processed text using the saved TF-IDF vectorizer.
+5. Pass the sparse feature vector to the saved classifier.
+6. Display the spam/ham prediction.
 
-## 🧠 How It Works
+The trained artifacts are stored in the repository:
+- `vectorizer.pkl` — fitted TF-IDF vectorizer.
+- `model.pkl` — fitted classifier.
 
-1. **Text Processing**
-   - Convert raw SMS text into lowercase.
-   - Remove punctuation and stopwords (optional in preprocessing).
-   - Convert text into TF-IDF features.
+The model is loaded once per Streamlit process using `st.cache_resource`. NLTK stopwords are also cached instead of being reconstructed for every token.
 
-2. **Model Prediction**
-   - A pre-trained Naive Bayes model is used to classify the message.
-   - Predictions are shown interactively using Streamlit.
+## Technology
 
-## 📁 Repository Structure
+- Python
+- NLTK (tokenization, stopwords and Porter stemming)
+- scikit-learn (TF-IDF and classification artifacts)
+- Streamlit
 
-Message_Predictor/
-├── app.py # Streamlit app code
-├── model.pkl # Pickled trained ML model
-├── vectorizer.pkl # Pickled TF-IDF vectorizer
-├── requirements.txt # Python dependencies
-├── setup.sh # Setup script (if applicable)
-├── Procfile # For deployment (Heroku/Streamlit etc.)
-└── .gitignore
+## Run locally
 
+The saved classifier and vectorizer artifacts were created with scikit-learn 1.4.2. `requirements.txt` pins that version because loading these pickle files under newer scikit-learn releases emits compatibility warnings and may produce invalid results. Do not upgrade scikit-learn without regenerating the artifacts and rerunning the prediction smoke test.
 
-## 🛠️ Installation
+~~~bash
+git clone https://github.com/PARAG-TIWARI/Message_Predictor.git
+cd Message_Predictor
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/PARAG-TIWARI/Message_Predictor.git
-   cd Message_Predictor
-Create a Python virtual environment (recommended):
+python -m venv .venv
 
-python3 -m venv venv
-source venv/bin/activate     # macOS / Linux
-venv\Scripts\activate        # Windows
-Install dependencies:
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
 
+# macOS / Linux
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-▶️ Run the App (Locally)
-Once installed, start the Streamlit app:
+~~~
 
+Download the NLTK data used by the app:
+
+~~~bash
+bash setup.sh
+~~~
+
+On Windows without Bash, run:
+
+~~~bash
+python -m nltk.downloader punkt punkt_tab stopwords
+~~~
+
+Start Streamlit:
+
+~~~bash
 streamlit run app.py
-A browser window will open where you can enter any SMS text to classify it as Spam or Not Spam.
+~~~
 
-📦 Deployment
-You can deploy this app to platforms like Streamlit Community Cloud or Heroku using the included Procfile and setup.sh. These files help streamline deployment.
+Open the local address shown by Streamlit (normally `http://localhost:8501`).
 
-🧪 Model Performance
-The Multinomial Naive Bayes model with TF-IDF vectorization is a standard and effective approach for text classification tasks such as SMS spam detection, known for high precision and reasonable accuracy on balanced text datasets. 
+## Deployment status
 
-🤝 Contributing
-Contributions are welcome! Please open an issue or submit a pull request with improvements.
+The repository includes a `Procfile` and a setup script, but it does not provide a current public Streamlit/Heroku deployment URL or a deployment receipt. Treat it as a locally runnable project unless a working hosted URL is added and verified.
 
-📜 License
-This project is open source and available under the MIT License.
+## Current limitations
 
+- No dataset source, licence or train/test split description is documented in the repository.
+- No committed evaluation report, confusion matrix or per-class precision/recall is available.
+- Only the scikit-learn artifact version (1.4.2) has been confirmed and pinned; the remaining dependencies are not fully locked.
+- No automated tests currently cover text preprocessing or predictions.
+- A text classifier can produce false positives/negatives; it should not be treated as a definitive phishing or security filter.
 
----
+## Recommended next improvements
 
-If you want, I can also generate badges (e.g., for license, model accuracy, Python version) or a *Project Demo GIF* section to make it more engaging!
-::contentReference[oaicite:3]{index=3}
+1. Record the dataset source, licence and data split used to train the model.
+2. Add reproducible training code and pin artifact-compatible dependency versions.
+3. Publish accuracy, precision, recall, F1 and a confusion matrix from a held-out test set.
+4. Add tests for empty messages, punctuation, URLs, numbers and unusual input.
+5. Add a live demo only after deployment is configured and its URL has been verified.
+
+## Repository files
+
+~~~text
+Message_Predictor/
+├── app.py
+├── model.pkl
+├── vectorizer.pkl
+├── requirements.txt
+├── setup.sh
+└── Procfile
+~~~
+
+[GitHub repository](https://github.com/PARAG-TIWARI/Message_Predictor) · [GitHub profile](https://github.com/PARAG-TIWARI)
