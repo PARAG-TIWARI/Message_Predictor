@@ -1,1 +1,20 @@
-venv
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
+
+# Streamlit secrets and environment
+.streamlit/secrets.toml
+.env
+.env.*
+
+# Logs and temporary files
+*.log
+.DS_Store
+Thumbs.db
