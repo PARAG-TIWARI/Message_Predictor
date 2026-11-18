@@ -28,7 +28,7 @@ The model is loaded once per Streamlit process using `st.cache_resource`. NLTK s
 
 ## Run locally
 
-Use the Python version compatible with the saved scikit-learn artifact. The repository does not currently record the exact library versions used to train the pickle files; a matching training environment may be required if loading fails.
+The saved classifier and vectorizer artifacts were created with scikit-learn 1.4.2. `requirements.txt` pins that version because loading these pickle files under newer scikit-learn releases emits compatibility warnings and may produce invalid results. Do not upgrade scikit-learn without regenerating the artifacts and rerunning the prediction smoke test.
 
 ~~~bash
 git clone https://github.com/PARAG-TIWARI/Message_Predictor.git
@@ -74,7 +74,7 @@ The repository includes a `Procfile` and a setup script, but it does not provide
 
 - No dataset source, licence or train/test split description is documented in the repository.
 - No committed evaluation report, confusion matrix or per-class precision/recall is available.
-- The exact training dependency versions for the pickle artifacts are not recorded.
+- Only the scikit-learn artifact version (1.4.2) has been confirmed and pinned; the remaining dependencies are not fully locked.
 - No automated tests currently cover text preprocessing or predictions.
 - A text classifier can produce false positives/negatives; it should not be treated as a definitive phishing or security filter.
 
