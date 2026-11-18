@@ -1,10 +1,13 @@
 """Smoke tests for the Streamlit application and saved model artifacts."""
 
+from pathlib import Path
+
 from streamlit.testing.v1 import AppTest
 
 
 def test_app_loads_artifacts_and_can_make_a_prediction():
-    app = AppTest.from_file("app.py", default_timeout=90).run()
+    app_path = Path(__file__).resolve().parents[1] / "app.py"
+    app = AppTest.from_file(app_path, default_timeout=90).run()
 
     # The page reaches the input UI only after the model, vectorizer and
     # required NLTK resources have loaded successfully.
